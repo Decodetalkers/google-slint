@@ -1,0 +1,48 @@
+import { Button, VerticalBox, HorizontalBox ,TextEdit,ComboBox,GroupBox} from "std-widgets.slint";
+
+export AppWindow := Window {
+    property<string> input: "";
+		callback Translate();
+		callback GetFrom() -> string ;
+		GetFrom => { orginfrom.current-value }
+		callback Translatefrom() -> string;
+		Translatefrom => { translatefrom.current-value }
+		callback Update(string);
+		Update(input) => {
+			translate.text = input;
+		}
+    VerticalBox {
+
+			HorizontalBox {
+				Text { text: "GoogleTranslate"; }
+				GroupBox {  
+					title: "origin";
+					orginfrom := ComboBox { 
+						model: ["en","zh"];
+						current-value: "en";
+
+					}
+				}
+				GroupBox {
+					title: "translate";
+					translatefrom := ComboBox { 
+						model: ["en","zh"];
+						current-value: "zh";
+
+					}
+				}
+			}
+		  origin := TextEdit {
+				text <=> input;
+				wrap: word-wrap;
+			}
+			Button {
+				text: "Translate";
+				clicked => { Translate(); }
+			}
+			translate := TextEdit {
+				text : "";
+				wrap: word-wrap;
+			}
+		}
+}
