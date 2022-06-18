@@ -8,6 +8,7 @@ export AppWindow := Window {
 		callback Translatefrom() -> string;
 		Translatefrom => { translatefrom.current-value }
 		callback Update(string);
+		title: "Google translate";
 		Update(input) => {
 			translate.text = input;
 		}
@@ -33,6 +34,7 @@ export AppWindow := Window {
 				}
 			}
 		  origin := TextEdit {
+				min-height: 200px;
 				text <=> input;
 				wrap: word-wrap;
 			}
@@ -41,6 +43,7 @@ export AppWindow := Window {
 				clicked => { Translate(); }
 			}
 			translate := TextEdit {
+				min-height: 200px;
 				text : "";
 				wrap: word-wrap;
 			}
