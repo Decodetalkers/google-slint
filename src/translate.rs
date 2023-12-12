@@ -1,9 +1,18 @@
-pub fn generate_url(v: Vec<String>, source: String, target: String) -> String {
-    let base_url = "https://translate.googleapis.com/translate_a/single";
+use url::Url;
+
+const BASE_URL: &str = "https://translate.googleapis.com/translate_a/single";
+
+pub fn generate_url(v: Vec<String>, source: String, target: String) -> Url {
+    let mut base_url = Url::parse(BASE_URL).unwrap();
     let q = v.join(" ");
-    let url = "?client=gtx&ie=UTF-8&oe=UTF-8&dt=t";
-    let source = format!("{}{}", "&sl=", source);
-    let target = format!("{}{}", "&tl=", target);
-    let input = format!("&q={}", q);
-    format!("{}{}{}{}{}", base_url, url, source, target, input)
+    base_url
+        .query_pairs_mut()
+        .append_pair("client", "gtx")
+        .append_pair("ie", "UTF-8")
+        .append_pair("oe", "UTF-8")
+        .append_pair("dt", "t")
+        .append_pair("sl", &source)
+        .append_pair("tl", &target)
+        .append_pair("q", &q);
+    base_url
 }
