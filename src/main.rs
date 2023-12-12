@@ -9,9 +9,9 @@ fn main() {
     ui.on_Translate(move || {
         let ui = temp.unwrap();
         let input = ui.get_input().to_string();
-        let origin = ui.invoke_GetFrom().to_string();
+        let origin = ui.invoke_GetFrom();
         let translateto = ui.invoke_Translatefrom().to_string();
-        let output = translate::generate_url(vec![input], origin, translateto);
+        let output = translate::generate_url(vec![input], &origin, &translateto);
         let translate = {
             if let Some(item) = reqwest::blocking::get(output)
                 .and_then(|resp| resp.text())
@@ -29,7 +29,6 @@ fn main() {
             } else {
                 "Error".to_string()
             }
-
         };
         ui.invoke_Update(SharedString::from(translate));
     });
