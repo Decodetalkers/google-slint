@@ -3,21 +3,19 @@ use serde_json::{self, Value};
 use slint::SharedString;
 mod translate;
 fn main() {
-    // let (sender,listener) = tokio::sync::mpsc::unbounded_channel::<String>();
     let ui = AppWindow::new().unwrap();
     let temp = ui.as_weak();
     ui.on_Translate(move || {
         let ui = temp.unwrap();
-        let input = ui.get_input().to_string();
+        let input = ui.get_input();
         let origin = ui.invoke_GetFrom();
-        let translateto = ui.invoke_Translatefrom().to_string();
-        let output = translate::generate_url(vec![input], &origin, &translateto);
+        let target = ui.invoke_Translatefrom();
+        let output = translate::generate_url(&input, &origin, &target);
         let translate = {
             if let Some(item) = reqwest::blocking::get(output)
                 .and_then(|resp| resp.text())
-                .map(|body| serde_json::from_str::<Vec<Value>>(&body))
-                .unwrap_or_else(|_| Ok(vec![]))
-                .unwrap_or_else(|_| vec![])
+                .map(|body| serde_json::from_str::<Vec<Value>>(&body).unwrap())
+                .unwrap_or_else(|_| Vec::new())
                 .first()
             {
                 item.as_array()

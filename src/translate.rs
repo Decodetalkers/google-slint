@@ -2,9 +2,8 @@ use url::Url;
 
 const BASE_URL: &str = "https://translate.googleapis.com/translate_a/single";
 
-pub fn generate_url(v: Vec<String>, source: &str, target: &str) -> Url {
+pub fn generate_url(v: &str, source: &str, target: &str) -> Url {
     let mut base_url = Url::parse(BASE_URL).unwrap();
-    let q = v.join(" ");
     base_url
         .query_pairs_mut()
         .append_pair("client", "gtx")
@@ -13,6 +12,6 @@ pub fn generate_url(v: Vec<String>, source: &str, target: &str) -> Url {
         .append_pair("dt", "t")
         .append_pair("sl", source)
         .append_pair("tl", target)
-        .append_pair("q", &q);
+        .append_pair("q", v);
     base_url
 }
